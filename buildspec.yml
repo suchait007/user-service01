@@ -19,8 +19,6 @@ phases:
       - ./gradlew clean build
       - echo Building the Docker image...
       - docker build -t 471112725743.dkr.ecr.us-east-1.amazonaws.com/retailsolution01:$TAG .
-      - echo Tagging Docker image...
-      - docker tag retailsolution01:$TAG 471112725743.dkr.ecr.us-east-1.amazonaws.com/retailsolution01:$TAG
   post_build:
     commands:
       - echo Build completed on `date`
