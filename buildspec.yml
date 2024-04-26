@@ -12,16 +12,17 @@ phases:
       - REPOSITORY_URI=471112725743.dkr.ecr.us-east-1.amazonaws.com/retailsolution01
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=$CODEBUILD_BUILD_ID}
+      - TAG="$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
   build:
     commands:
       - echo Build started on `date`
       - ./gradlew clean build
       - echo Building the Docker image...
-      - docker build -t 471112725743.dkr.ecr.us-east-1.amazonaws.com/retailsolution01:$CODEBUILD_BUILD_ID .
+      - docker build -t 471112725743.dkr.ecr.us-east-1.amazonaws.com/retailsolution01:$TAG .
       - echo Tagging Docker image...
-      - docker tag retailsolution01:$CODEBUILD_BUILD_ID 471112725743.dkr.ecr.us-east-1.amazonaws.com/retailsolution01:$CODEBUILD_BUILD_ID
+      - docker tag retailsolution01:$TAG 471112725743.dkr.ecr.us-east-1.amazonaws.com/retailsolution01:$TAG
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker images...
-      - docker push 471112725743.dkr.ecr.us-east-1.amazonaws.com/retailsolution01:$CODEBUILD_BUILD_ID
+      - docker push 471112725743.dkr.ecr.us-east-1.amazonaws.com/retailsolution01:$TAG
