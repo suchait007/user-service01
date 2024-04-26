@@ -1,0 +1,17 @@
+spring:
+  profiles:
+    active: prod
+  application:
+    name: user-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/userdb
+    username: postgres
+    password: gwRWcdWBE6
+  #jpa:
+    #database-platform: org.hibernate.dialect.PostgresSQLDialect
+  flyway:
+    locations:
+      - classpath:db/migration
+
+
+

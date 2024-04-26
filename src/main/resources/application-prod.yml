@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://retailsolution01.ch04asga4gxk.us-east-1.rds.amazonaws.com:5432/postgres
+    username: postgres
+    password: Developer
