@@ -19,9 +19,9 @@ phases:
       - echo Building the Docker image...
       - docker build -t $REPOSITORY_URI:latest .
       - echo Tagging Docker image...
-      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+      - docker tag retailsolution01:latest 471112725743.dkr.ecr.us-east-1.amazonaws.com/retailsolution01:latest
   post_build:
     commands:
       - echo Build completed on `date`
       - echo Pushing the Docker images...
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - docker push 471112725743.dkr.ecr.us-east-1.amazonaws.com/retailsolution01:latest
