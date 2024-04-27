@@ -1,14 +1,20 @@
 {{- define "user-service.env.vars" }}
 
 - name: SPRING_DATASOURCE_URL
-  value: {{ .Values.db.url }}
+  valueFrom:
+    secretKeyRef:
+        name: database-secret
+        key: url
 - name: SPRING_DATASOURCE_USERNAME
-  value: {{ .Values.db.username }}
+  valueFrom:
+    secretKeyRef:
+        name: database-secret
+        key: username
 - name: SPRING_DATASOURCE_PASSWORD
   valueFrom:
     secretKeyRef:
-        name: postgres-database-postgresql
-        key: postgres-password
+        name: database-secret
+        key: password
 
 {{- end }}
 

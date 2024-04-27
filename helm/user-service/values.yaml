@@ -80,7 +80,3 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
-
-db:
-  url: jdbc:postgresql://postgres-database-postgresql.user-service-demo.svc.cluster.local:5432/userdb
-  username: postgres
