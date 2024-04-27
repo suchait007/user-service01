@@ -18,7 +18,9 @@ phases:
     commands:
       - echo Build started on `date`
       - ./gradlew clean build
+      - cd ..
       - zip -r user-service-$IMAGE_TAG.zip user-service/
+      - cd user-service/
       - echo Building the Docker image...
       - docker build -t $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
