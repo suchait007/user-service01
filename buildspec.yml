@@ -11,6 +11,10 @@ phases:
       - export KUBECONFIG=$HOME/.kube/config
       - kubectl config view --minify
       - kubectl describe configmap aws-auth -n kube-system
+      - AWS_ACCESS_KEY_ID=AKIAW3MEBWTXWOAOA2D5
+      - AWS_SECRET_ACCESS_KEY=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
+      - AWS_DEFAULT_REGION=us-west-2
+      - aws configure
       - kubectl cluster-info
   pre_build:
     commands:
