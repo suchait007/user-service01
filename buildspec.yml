@@ -14,8 +14,10 @@ phases:
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=$CODEBUILD_BUILD_ID}
       - echo $IMAGE_TAG
-      - EKS_KUBECTL_ROLE_ARN=arn:aws:iam::471112725743:role/service-role/codebuild-retailsolution-pr-service-role
+      - EKS_KUBECTL_ROLE_ARN=arn:aws:iam::471112725743:role/EksCodeBuildKubectlRole
       - echo $EKS_KUBECTL_ROLE_ARN
+      - EKS_CLUSTER_NAME=my-cluster
+      - echo $EKS_CLUSTER_NAME
   build:
     commands:
       - echo Build started on `date`
