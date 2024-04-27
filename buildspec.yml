@@ -6,8 +6,8 @@ phases:
       - EKS_CLUSTER_NAME=my-cluster
       - AWS_REGION=us-west-2
       - echo $EKS_CLUSTER_NAME
-      - aws sts get-caller-identity  --profile my-profile
-      - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION -profile my-profile
+      - aws sts get-caller-identity
+      - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
       - export KUBECONFIG=$HOME/.kube/config
       - kubectl config view --minify
       - kubectl describe configmap aws-auth -n kube-system
