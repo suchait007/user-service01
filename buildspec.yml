@@ -49,4 +49,4 @@ phases:
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - echo "Setting Environment Variables related to AWS CLI for Kube Config Setup"
       - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
-      - helm upgrade user-service helm/user-service --set image.tag=$IMAGE_TAG
+      - helm upgrade --install user-service helm/user-service --set image.tag=$IMAGE_TAG
