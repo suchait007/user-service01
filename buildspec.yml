@@ -14,14 +14,10 @@ phases:
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=$CODEBUILD_BUILD_ID}
       - echo $IMAGE_TAG
-      - echo $CODEBUILD_SRC_DIR
   build:
     commands:
       - echo Build started on `date`
       - ./gradlew clean build
-      - cd ..
-      - zip -r user-service-$IMAGE_TAG.zip $CODEBUILD_SRC_DIR/
-      - cd $CODEBUILD_SRC_DIR/
       - echo Building the Docker image...
       - docker build -t $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
@@ -31,5 +27,12 @@ phases:
       - echo Build completed on `date`
       - echo Pushing the Docker images...
       - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - cd ..
-      - aws s3 cp user-service-$IMAGE_TAG.zip s3://retail-solution-src-codes-01/
+      - echo "Setting Environment Variables related to AWS CLI for Kube Config Setup"
+      - CREDENTIALS=$(aws sts assume-role --role-arn $EKS_KUBECTL_ROLE_ARN --role-session-name codebuild-kubectl --duration-seconds 900)
+      - export AWS_ACCESS_KEY_ID="$(echo ${CREDENTIALS} | jq -r '.Credentials.AccessKeyId')"
+      - export AWS_SECRET_ACCESS_KEY="$(echo ${CREDENTIALS} | jq -r '.Credentials.SecretAccessKey')"
+      - export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
+      - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
+      - echo "Update Kube Config"
+      - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME
+      - helm upgrade helm_charts/user-service -f helm_charts/user-service/values.yaml --set image.tag=$IMAGE_TAG
