@@ -14,13 +14,14 @@ phases:
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=$CODEBUILD_BUILD_ID}
       - echo $IMAGE_TAG
+      - echo $CODEBUILD_SRC_DIR
   build:
     commands:
       - echo Build started on `date`
       - ./gradlew clean build
       - cd ..
-      - zip -r user-service-$IMAGE_TAG.zip user-service/
-      - cd user-service/
+      - zip -r user-service-$IMAGE_TAG.zip $CODEBUILD_SRC_DIR/
+      - cd $CODEBUILD_SRC_DIR/
       - echo Building the Docker image...
       - docker build -t $REPOSITORY_URI:latest .
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
