@@ -4,6 +4,12 @@ phases:
   install:
     commands:
       - EKS_CLUSTER_NAME=my-cluster
+      - AWS_REGION=us-west-2
+      - echo $EKS_CLUSTER_NAME
+      - aws sts get-caller-identity
+      - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
+      - export KUBECONFIG=$HOME/.kube/config
+      - kubectl config view --minify
       - AWS_ACCESS_KEY_ID=AKIAW3MEBWTXWOAOA2D5
       - AWS_SECRET_ACCESS_KEY=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
       - AWS_DEFAULT_REGION=us-west-2
@@ -26,6 +32,8 @@ phases:
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=$CODEBUILD_BUILD_ID}
       - echo $IMAGE_TAG
+      - EKS_KUBECTL_ROLE_ARN=arn:aws:iam::471112725743:role/EksCodeBuildKubectlRole
+      - echo $EKS_KUBECTL_ROLE_ARN
   build:
     commands:
       - echo Build started on `date`
