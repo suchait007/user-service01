@@ -17,6 +17,8 @@ phases:
       - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
       - aws configure set region $AWS_DEFAULT_REGION
       - kubectl cluster-info
+      - curl -sSL https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+      - helm repo add stable https://charts.helm.sh/stable && helm repo update
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
