@@ -9,6 +9,7 @@ phases:
       - aws sts get-caller-identity
       - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
       - export KUBECONFIG=$HOME/.kube/config
+      - kubectl config view --minify
       - kubectl cluster-info
   pre_build:
     commands:
