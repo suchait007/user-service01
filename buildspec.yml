@@ -1,6 +1,15 @@
 version: 0.2
 
 phases:
+  install:
+    commands:
+      - EKS_CLUSTER_NAME=my-cluster
+      - AWS_REGION=us-west-2
+      - echo $EKS_CLUSTER_NAME
+      - aws sts get-caller-identity
+      - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
+      - export KUBECONFIG=$HOME/.kube/config
+      - kubectl cluster-info
   pre_build:
     commands:
       - echo Logging in to Amazon ECR...
@@ -16,8 +25,6 @@ phases:
       - echo $IMAGE_TAG
       - EKS_KUBECTL_ROLE_ARN=arn:aws:iam::471112725743:role/EksCodeBuildKubectlRole
       - echo $EKS_KUBECTL_ROLE_ARN
-      - EKS_CLUSTER_NAME=my-cluster
-      - echo $EKS_CLUSTER_NAME
   build:
     commands:
       - echo Build started on `date`
@@ -32,11 +39,5 @@ phases:
       - echo Pushing the Docker images...
       - docker push $REPOSITORY_URI:$IMAGE_TAG
       - echo "Setting Environment Variables related to AWS CLI for Kube Config Setup"
-      - CREDENTIALS=$(aws sts assume-role --role-arn $EKS_KUBECTL_ROLE_ARN --role-session-name codebuild-kubectl --duration-seconds 900)
-      - export AWS_ACCESS_KEY_ID="$(echo ${CREDENTIALS} | jq -r '.Credentials.AccessKeyId')"
-      - export AWS_SECRET_ACCESS_KEY="$(echo ${CREDENTIALS} | jq -r '.Credentials.SecretAccessKey')"
-      - export AWS_SESSION_TOKEN="$(echo ${CREDENTIALS} | jq -r '.Credentials.SessionToken')"
-      - export AWS_EXPIRATION=$(echo ${CREDENTIALS} | jq -r '.Credentials.Expiration')
-      - echo "Update Kube Config"
-      - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME
+      - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
       - helm upgrade helm_charts/user-service -f helm_charts/user-service/values.yaml --set image.tag=$IMAGE_TAG
