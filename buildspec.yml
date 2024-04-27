@@ -31,4 +31,5 @@ phases:
       - echo Build completed on `date`
       - echo Pushing the Docker images...
       - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - cd ..
       - aws s3 cp user-service-$IMAGE_TAG.zip s3://retail-solution-src-codes-01/
