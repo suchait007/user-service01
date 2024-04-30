@@ -10,9 +10,9 @@ phases:
       - aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
       - export KUBECONFIG=$HOME/.kube/config
       - kubectl config view --minify
-      - AWS_ACCESS_KEY_ID=AKIAW3MEBWTXWOAOA2D5
-      - AWS_SECRET_ACCESS_KEY=yUhUp3Q5sd2qXRkoN9M/Xt8uHhudQxIm2oigBpGA
-      - AWS_DEFAULT_REGION=us-west-2
+      - AWS_ACCESS_KEY_ID=your_key_id_here
+      - AWS_SECRET_ACCESS_KEY=your_access_key_here
+      - AWS_DEFAULT_REGION=your_region_here
       - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
       - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
       - aws configure set region $AWS_DEFAULT_REGION
